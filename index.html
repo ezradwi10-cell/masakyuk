@@ -57,7 +57,7 @@ main{max-width:1180px;margin:auto;padding:28px 22px 60px}.hero{display:grid;grid
       <button class="chip" data-value="Pedas">🌶️ Pedas</button><button class="chip" data-value="Tidak pedas">Tidak pedas</button><button class="chip" data-value="Berkuah">🍲 Berkuah</button><button class="chip" data-value="Goreng">Goreng</button><button class="chip" data-value="Tumis">Tumis</button><button class="chip" data-value="Panggang">Panggang</button><button class="chip" data-value="Menu hemat">🪙 Menu hemat</button>
     </div></div>
     <button class="generate" id="generate">✨ Buatkan Ide Resep</button>
-    <p style="text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0">Contoh demo UI · Integrasi Gemini AI dapat ditambahkan di tahap berikutnya</p>
+    <p style="text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0">Resep dibuat langsung dengan Gemini AI · Takaran bahan disesuaikan untuk 3 porsi</p>
   </section>
 
   <section class="results panel" id="hasil">
@@ -91,20 +91,122 @@ const recipes={
   Asian:{name:"Chicken Teriyaki Bowl",emoji:"🍱",style:"ASIAN",desc:"Ayam teriyaki manis gurih dengan sayuran, nikmat disajikan bersama nasi hangat.",ingredients:[["Ayam fillet","300 g"],["Bawang bombai","60 g"],["Brokoli","100 g"],["Saus teriyaki","45 ml"],["Kecap asin","10 ml"],["Minyak","15 ml"],["Nasi matang","450 g"]],steps:["Potong ayam dan sayuran, siapkan saus teriyaki.","Tumis bawang bombai dengan sedikit minyak hingga harum.","Masukkan ayam dan masak sampai matang.","Tambahkan saus teriyaki dan kecap asin, aduk rata.","Masukkan brokoli, masak hingga tingkat kematangan sesuai selera. Sajikan dengan nasi."]},
   Western:{name:"Creamy Chicken Pasta",emoji:"🍝",style:"WESTERN",desc:"Pasta creamy yang lembut dan mudah dibuat untuk variasi menu keluarga.",ingredients:[["Pasta kering","220 g"],["Ayam fillet","250 g"],["Susu cair","200 ml"],["Keju parmesan","35 g"],["Bawang putih","12 g"],["Mentega","20 g"],["Garam dan lada","secukupnya"]],steps:["Rebus pasta sesuai petunjuk kemasan, sisihkan sedikit air rebusan.","Potong ayam, bumbui dengan garam dan lada.","Lelehkan mentega, tumis bawang putih lalu masak ayam hingga matang.","Tuang susu dan masukkan keju, aduk hingga saus creamy.","Masukkan pasta, aduk rata. Tambahkan air rebusan jika saus terlalu kental."]}
 };
-function makeDemo(){
- const cuisine=selections.cuisine[0]||"Indonesian";let r={...recipes[cuisine]};
- const proteins=selections.protein, carbs=selections.carb, prefs=selections.preference;
- if(proteins.length){r.name=(proteins[0]+" "+(cuisine==="Western"?"Pasta":"Bumbu "+(prefs[0]||"Pilihan"))).replace("Bumbu ","");}
- if(carbs.length)r.desc+=` Karbohidrat pilihan: ${carbs.join(", ")}.`;
- if(prefs.length)r.desc+=` Preferensi: ${prefs.join(", ")}.`;
- document.getElementById("dishEmoji").textContent=r.emoji;document.getElementById("recipeName").textContent=r.name;
- document.getElementById("recipeDesc").textContent=r.desc;document.getElementById("tagCuisine").textContent=cuisine.toUpperCase();
- document.getElementById("tagStyle").textContent=prefs[0]?prefs[0].toUpperCase():r.style;
- document.getElementById("ingredients").innerHTML=r.ingredients.map(x=>`<div class="ingredient"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
- document.getElementById("steps").innerHTML=r.steps.map(x=>`<li>${x}</li>`).join("");
- document.getElementById("hasil").classList.add("show");document.getElementById("hasil").scrollIntoView({behavior:"smooth",block:"start"});
+const API_URL = "https://masakyuk.ezradwi10.workers.dev/";
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[ch]));
 }
-document.getElementById("generate").addEventListener("click",makeDemo);
+
+function listFrom(value) {
+  if (Array.isArray(value)) return value;
+  if (value == null || value === "") return [];
+  return [value];
+}
+
+async function makeRecipe() {
+  const button = document.getElementById("generate");
+  const resultPanel = document.getElementById("hasil");
+  const cuisine = selections.cuisine[0] || "Indonesian";
+  const proteins = selections.protein;
+  const carbs = selections.carb;
+  const preferences = selections.preference;
+
+  if (!proteins.length) {
+    alert("Pilih minimal satu sumber protein terlebih dahulu.");
+    return;
+  }
+  if (!carbs.length) {
+    alert("Pilih minimal satu karbohidrat terlebih dahulu.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "⏳ Gemini sedang meracik resep...";
+  resultPanel.classList.add("show");
+  document.getElementById("recipeName").textContent = "Sedang membuat resep...";
+  document.getElementById("recipeDesc").textContent = "Mohon tunggu sebentar, MasakYuk sedang menyiapkan ide menu untukmu.";
+  document.getElementById("ingredients").innerHTML = "";
+  document.getElementById("steps").innerHTML = "";
+  document.getElementById("dishEmoji").textContent = "🍲";
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        protein: proteins,
+        carbohydrate: carbs,
+        cuisine,
+        preferences,
+        servings: 3
+      })
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("Respons API tidak berupa JSON. Periksa konfigurasi Cloudflare Worker.");
+    }
+
+    if (!response.ok || data.success === false) {
+      throw new Error(data.error || `Permintaan gagal (${response.status}).`);
+    }
+
+    const recipe = data.recipe || data;
+    const title = recipe.name || recipe.title || "Resep MasakYuk";
+    const description = recipe.description || recipe.desc || `Resep ${cuisine} sesuai bahan pilihanmu.`;
+    const ingredients = listFrom(recipe.ingredients || recipe.bahan);
+    const steps = listFrom(recipe.steps || recipe.instructions || recipe.langkah);
+
+    document.getElementById("recipeName").textContent = title;
+    document.getElementById("recipeDesc").textContent = description;
+    document.getElementById("tagCuisine").textContent = cuisine.toUpperCase();
+    document.getElementById("tagStyle").textContent = preferences[0]
+      ? preferences[0].toUpperCase()
+      : cuisine.toUpperCase();
+    document.getElementById("dishEmoji").textContent = "🍲";
+
+    document.getElementById("ingredients").innerHTML = ingredients.map(item => {
+      if (Array.isArray(item)) {
+        return `<div class="ingredient"><span>${escapeHTML(item[0])}</span><b>${escapeHTML(item[1])}</b></div>`;
+      }
+      if (typeof item === "string") {
+        return `<div class="ingredient"><span>${escapeHTML(item)}</span></div>`;
+      }
+      const name = item.name || item.ingredient || item.bahan || "Bahan";
+      const amount = item.amount ?? item.quantity ?? item.gram ?? item.qty ?? "";
+      const unit = item.unit || item.satuan || "";
+      return `<div class="ingredient"><span>${escapeHTML(name)}</span><b>${escapeHTML([amount, unit].filter(Boolean).join(" "))}</b></div>`;
+    }).join("");
+
+    document.getElementById("steps").innerHTML = steps.map(item => {
+      const text = typeof item === "string" ? item : (item.instruction || item.step || item.text || JSON.stringify(item));
+      return `<li>${escapeHTML(text)}</li>`;
+    }).join("");
+
+    if (!ingredients.length) {
+      document.getElementById("ingredients").textContent = "Data bahan belum tersedia pada respons API.";
+    }
+    if (!steps.length) {
+      document.getElementById("steps").innerHTML = "<li>Langkah memasak belum tersedia pada respons API.</li>";
+    }
+
+    resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    document.getElementById("recipeName").textContent = "Resep belum berhasil dibuat";
+    document.getElementById("recipeDesc").textContent = error.message || "Terjadi kesalahan saat menghubungi API.";
+    document.getElementById("ingredients").innerHTML = "";
+    document.getElementById("steps").innerHTML = "";
+  } finally {
+    button.disabled = false;
+    button.textContent = "✨ Buatkan Ide Resep";
+  }
+}
+
+document.getElementById("generate").addEventListener("click", makeRecipe);
 document.getElementById("save").addEventListener("click",e=>{e.currentTarget.textContent=e.currentTarget.textContent.includes("Simpan")?"♥ Tersimpan":"♡ Simpan resep"});
 </script>
 </body>
