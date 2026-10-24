@@ -36,15 +36,15 @@ main{max-width:1180px;margin:auto;padding:28px 22px 60px}.hero{display:grid;grid
   </section>
 
   <section class="panel" id="generator">
-    <div class="panel-head"><div><h2>Yuk, racik menu hari ini!</h2><p>Pilih satu atau beberapa bahan. Kamu bisa memilih semua kategori juga.</p></div><span style="color:var(--green);font-size:13px;font-weight:750">Langkah 1 dari 3</span></div>
-    <div class="step"><span class="num">1</span> Pilih sumber protein</div>
+    <div class="panel-head"><div><h2>Yuk, racik menu hari ini!</h2><p>Pilih satu opsi pada setiap kategori wajib. Preferensi tambahan bersifat opsional.</p></div><span style="color:var(--green);font-size:13px;font-weight:750">Langkah 1 dari 3</span></div>
+    <div class="step"><span class="num">1</span> Pilih sumber protein <span style="font-size:12px;color:var(--muted);font-weight:500">(wajib · pilih satu)</span></div>
     <div class="group"><p class="subheading">PROTEIN HEWANI</p><div class="chips" data-group="protein">
       <button class="chip" data-value="Ayam">🍗 Ayam</button><button class="chip" data-value="Sapi">🥩 Sapi</button><button class="chip" data-value="Ikan">🐟 Ikan</button><button class="chip" data-value="Udang">🦐 Udang</button><button class="chip" data-value="Telur">🥚 Telur</button>
     </div></div>
     <div class="group"><p class="subheading">PROTEIN NABATI</p><div class="chips" data-group="protein">
       <button class="chip" data-value="Tempe">Tempe</button><button class="chip" data-value="Tahu">Tahu</button><button class="chip" data-value="Kacang-kacangan">Kacang-kacangan</button>
     </div></div>
-    <div class="step"><span class="num">2</span> Pilih karbohidrat</div>
+    <div class="step"><span class="num">2</span> Pilih karbohidrat <span style="font-size:12px;color:var(--muted);font-weight:500">(wajib · pilih satu)</span></div>
     <div class="group"><div class="chips" data-group="carb">
       <button class="chip" data-value="Nasi">🍚 Nasi</button><button class="chip" data-value="Mie">🍜 Mie</button><button class="chip" data-value="Kentang">🥔 Kentang</button><button class="chip" data-value="Roti">🍞 Roti</button><button class="chip" data-value="Ubi">Ubi</button><button class="chip" data-value="Jagung">🌽 Jagung</button>
     </div></div>
@@ -52,12 +52,16 @@ main{max-width:1180px;margin:auto;padding:28px 22px 60px}.hero{display:grid;grid
     <div class="group"><div class="chips" data-group="cuisine">
       <button class="chip active" data-value="Indonesian">🇮🇩 Indonesian</button><button class="chip" data-value="Asian">🥢 Asian</button><button class="chip" data-value="Western">🍝 Western</button>
     </div></div>
-    <div class="step"><span class="num">＋</span> Preferensi tambahan <span style="font-size:12px;color:var(--muted);font-weight:500">(opsional)</span></div>
+    <div class="step"><span class="num">＋</span> Preferensi tambahan <span style="font-size:12px;color:var(--muted);font-weight:500">(opsional · pilih maksimal satu)</span></div>
     <div class="group"><div class="chips" data-group="preference">
       <button class="chip" data-value="Pedas">🌶️ Pedas</button><button class="chip" data-value="Tidak pedas">Tidak pedas</button><button class="chip" data-value="Berkuah">🍲 Berkuah</button><button class="chip" data-value="Goreng">Goreng</button><button class="chip" data-value="Tumis">Tumis</button><button class="chip" data-value="Panggang">Panggang</button><button class="chip" data-value="Menu hemat">🪙 Menu hemat</button>
     </div></div>
+    <div class="step"><span class="num">4</span> Pilih jumlah porsi <span style="font-size:12px;color:var(--muted);font-weight:500">(wajib · pilih satu)</span></div>
+    <div class="group"><div class="chips" data-group="servings">
+      <button class="chip" data-value="2">👥 2 porsi</button><button class="chip" data-value="4">👨‍👩‍👧‍👦 4 porsi</button>
+    </div></div>
     <button class="generate" id="generate">✨ Buatkan Ide Resep</button>
-    <p style="text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0">Resep dibuat langsung dengan Gemini AI · Takaran bahan disesuaikan untuk 3 porsi</p>
+    <p id="servingsHint" style="text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0">Resep dibuat langsung dengan Gemini AI · Pilih jumlah porsi untuk menyesuaikan takaran bahan</p>
   </section>
 
   <section class="results panel" id="hasil">
@@ -67,31 +71,80 @@ main{max-width:1180px;margin:auto;padding:28px 22px 60px}.hero{display:grid;grid
         <div class="tags"><span class="tag" id="tagCuisine">INDONESIAN</span><span class="tag" id="tagStyle">TUMIS</span><span class="tag">MENU KELUARGA</span></div>
         <h2 class="recipe-title" id="recipeName">Tumis Ayam Kemangi</h2>
         <p class="desc" id="recipeDesc">Menu rumahan yang praktis, lezat, dan cocok dinikmati bersama keluarga.</p>
-        <div class="stats"><span><b>⏱ 25 menit</b>Estimasi waktu</span><span><b>👨‍👩‍👧 3 porsi</b>Jumlah porsi</span><span><b>☺ Mudah</b>Tingkat kesulitan</span></div>
+        <div class="stats"><span><b>⏱ 25 menit</b>Estimasi waktu</span><span><b id="resultServings">👨‍👩‍👧 2 porsi</b>Jumlah porsi</span><span><b>☺ Mudah</b>Tingkat kesulitan</span></div>
         <button class="save" id="save">♡ Simpan resep</button>
       </div>
     </div>
     <div class="recipe-details">
-      <div class="detail-card"><h3>🧺 Bahan-bahan <small style="color:var(--muted);font-weight:500">(3 porsi)</small></h3><div id="ingredients"></div></div>
+      <div class="detail-card"><h3>🧺 Bahan-bahan <small id="ingredientServings" style="color:var(--muted);font-weight:500">(2 porsi)</small></h3><div id="ingredients"></div></div>
       <div class="detail-card"><h3>👩‍🍳 Langkah memasak</h3><ol class="steps" id="steps"></ol></div>
     </div>
   </section>
   <div class="foot">Dibuat dengan ♥ untuk dapur keluarga Indonesia · MasakYuk</div>
 </main>
 <script>
-const selections={protein:[],carb:[],cuisine:["Indonesian"],preference:[]};
-document.querySelectorAll(".chips").forEach(group=>group.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{
-  const key=group.dataset.group, val=btn.dataset.value;
-  if(key==="cuisine"){selections[key]=[val];group.querySelectorAll(".chip").forEach(b=>b.classList.toggle("active",b===btn));return}
-  const active=btn.classList.toggle("active");
-  selections[key]=active?[...selections[key],val]:selections[key].filter(x=>x!==val);
-})));
+const selections = {
+  protein: [],
+  carb: [],
+  cuisine: ["Indonesian"],
+  preference: [],
+  servings: []
+};
+
+// Single-select behavior for protein, carb, preference, cuisine, and servings.
+// Protein, carb, preference and servings each allow at most one active choice.
+document.querySelectorAll(".chips").forEach(group => {
+  group.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = group.dataset.group;
+      const value = btn.dataset.value;
+
+      if (key === "protein" || key === "carb" || key === "preference" ||
+          key === "cuisine" || key === "servings") {
+        const allGroups = [...document.querySelectorAll(`.chips[data-group="${key}"]`)];
+        const alreadyActive = btn.classList.contains("active");
+
+        // Cuisine remains selected; other categories can be cleared by clicking the active option.
+        if (key === "cuisine") {
+          selections[key] = [value];
+          allGroups.forEach(g => g.querySelectorAll(".chip").forEach(b => {
+            b.classList.toggle("active", b.dataset.value === value);
+          }));
+        } else if (alreadyActive) {
+          selections[key] = [];
+          allGroups.forEach(g => g.querySelectorAll(".chip").forEach(b => b.classList.remove("active")));
+        } else {
+          selections[key] = [value];
+          allGroups.forEach(g => g.querySelectorAll(".chip").forEach(b => {
+            b.classList.toggle("active", b.dataset.value === value);
+          }));
+        }
+
+        if (key === "servings") {
+          updateServingLabels();
+        }
+      }
+    });
+  });
+});
+
+function updateServingLabels() {
+  const servings = selections.servings[0];
+  const hint = document.getElementById("servingsHint");
+  if (hint) {
+    hint.textContent = servings
+      ? `Resep dibuat langsung dengan Gemini AI · Takaran bahan disesuaikan untuk ${servings} porsi`
+      : "Resep dibuat langsung dengan Gemini AI · Pilih jumlah porsi untuk menyesuaikan takaran bahan";
+  }
+}
+
 const recipes={
   Indonesian:{name:"Tumis Ayam Kemangi",emoji:"🍛",style:"TUMIS",desc:"Tumis ayam wangi kemangi dengan bumbu sederhana. Pas untuk lauk makan siang keluarga.",ingredients:[["Dada ayam fillet","300 g"],["Daun kemangi","40 g"],["Bawang merah","40 g"],["Bawang putih","15 g"],["Cabai merah","30 g"],["Kecap manis","25 ml"],["Minyak","15 ml"],["Garam","3 g"]],steps:["Potong ayam menjadi ukuran sekali suap, lalu cuci dan tiriskan.","Iris bawang merah, bawang putih, dan cabai.","Panaskan minyak. Tumis bawang dan cabai sampai harum.","Masukkan ayam, aduk hingga berubah warna dan matang.","Tambahkan kecap serta garam. Masukkan kemangi, aduk sebentar, lalu sajikan."]},
   Asian:{name:"Chicken Teriyaki Bowl",emoji:"🍱",style:"ASIAN",desc:"Ayam teriyaki manis gurih dengan sayuran, nikmat disajikan bersama nasi hangat.",ingredients:[["Ayam fillet","300 g"],["Bawang bombai","60 g"],["Brokoli","100 g"],["Saus teriyaki","45 ml"],["Kecap asin","10 ml"],["Minyak","15 ml"],["Nasi matang","450 g"]],steps:["Potong ayam dan sayuran, siapkan saus teriyaki.","Tumis bawang bombai dengan sedikit minyak hingga harum.","Masukkan ayam dan masak sampai matang.","Tambahkan saus teriyaki dan kecap asin, aduk rata.","Masukkan brokoli, masak hingga tingkat kematangan sesuai selera. Sajikan dengan nasi."]},
   Western:{name:"Creamy Chicken Pasta",emoji:"🍝",style:"WESTERN",desc:"Pasta creamy yang lembut dan mudah dibuat untuk variasi menu keluarga.",ingredients:[["Pasta kering","220 g"],["Ayam fillet","250 g"],["Susu cair","200 ml"],["Keju parmesan","35 g"],["Bawang putih","12 g"],["Mentega","20 g"],["Garam dan lada","secukupnya"]],steps:["Rebus pasta sesuai petunjuk kemasan, sisihkan sedikit air rebusan.","Potong ayam, bumbui dengan garam dan lada.","Lelehkan mentega, tumis bawang putih lalu masak ayam hingga matang.","Tuang susu dan masukkan keju, aduk hingga saus creamy.","Masukkan pasta, aduk rata. Tambahkan air rebusan jika saus terlalu kental."]}
 };
 const API_URL = "https://masakyuk.ezradwi10.workers.dev/";
+updateServingLabels();
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, ch => ({
@@ -112,13 +165,18 @@ async function makeRecipe() {
   const proteins = selections.protein;
   const carbs = selections.carb;
   const preferences = selections.preference;
+  const servings = Number(selections.servings[0]);
 
   if (!proteins.length) {
-    alert("Pilih minimal satu sumber protein terlebih dahulu.");
+    alert("Protein wajib dipilih. Silakan pilih satu sumber protein.");
     return;
   }
   if (!carbs.length) {
-    alert("Pilih minimal satu karbohidrat terlebih dahulu.");
+    alert("Karbohidrat wajib dipilih. Silakan pilih satu sumber karbohidrat.");
+    return;
+  }
+  if (![2, 4].includes(servings)) {
+    alert("Jumlah porsi wajib dipilih: 2 atau 4 porsi.");
     return;
   }
 
@@ -140,7 +198,7 @@ async function makeRecipe() {
         carbohydrate: carbs,
         cuisine,
         preferences,
-        servings: 3
+        servings
       })
     });
 
@@ -163,6 +221,8 @@ async function makeRecipe() {
 
     document.getElementById("recipeName").textContent = title;
     document.getElementById("recipeDesc").textContent = description;
+    document.getElementById("resultServings").textContent = `👨‍👩‍👧 ${servings} porsi`;
+    document.getElementById("ingredientServings").textContent = `(${servings} porsi)`;
     document.getElementById("tagCuisine").textContent = cuisine.toUpperCase();
     document.getElementById("tagStyle").textContent = preferences[0]
       ? preferences[0].toUpperCase()
