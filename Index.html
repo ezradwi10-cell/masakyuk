@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MasakYuk — Inspirasi Menu Harian</title>
+<style>
+:root{--coral:#f16b61;--pink:#ffe7e2;--green:#527c59;--cream:#fffaf4;--ink:#302b28;--muted:#837a73;--line:#eee4db;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px clamp(18px,5vw,72px);background:#fffaf4;position:sticky;top:0;z-index:5;border-bottom:1px solid #f1e8df}
+.brand{display:flex;gap:10px;align-items:center;font-weight:850;font-size:25px;letter-spacing:-1px}.brand-mark{width:42px;height:42px;border-radius:14px;background:var(--coral);display:grid;place-items:center;color:#fff;font-size:23px}
+nav{display:flex;gap:24px;color:#625a53;font-size:14px}nav a{color:inherit;text-decoration:none}.nav-cta{background:#fff;border:1px solid var(--line);padding:10px 16px;border-radius:30px}
+main{max-width:1180px;margin:auto;padding:28px 22px 60px}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:25px 8px 32px}
+.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}.hero h1{font-size:clamp(36px,5vw,58px);line-height:1.05;letter-spacing:-2px;margin:12px 0}.hero h1 span{color:var(--coral)}.hero p{color:var(--muted);font-size:16px;line-height:1.7;max-width:510px}
+.hero-art{background:#f9e5d7;border-radius:30px;min-height:225px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.hero-art .emoji{font-size:105px;filter:drop-shadow(0 15px 12px #b96c4930)}.bubble{position:absolute;background:#fff;border-radius:18px;padding:12px 16px;font-size:13px;box-shadow:0 8px 25px #573b2512}.bubble.one{left:18px;top:24px}.bubble.two{right:18px;bottom:20px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 12px 35px #65472a08}.panel-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:22px}.panel-head h2{margin:0;font-size:22px}.panel-head p{margin:5px 0 0;color:var(--muted);font-size:13px}.step{display:flex;align-items:center;gap:10px;font-weight:750;margin:20px 0 12px}.num{width:28px;height:28px;border-radius:50%;background:var(--pink);color:#c44d46;display:grid;place-items:center;font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:9px}.chip{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:13px;cursor:pointer;font-size:14px;color:#625a53;transition:.15s}.chip.active{border-color:var(--coral);background:#fff0ed;color:#b74640;font-weight:750;box-shadow:0 0 0 1px #f16b6120}.subheading{font-size:12px;color:var(--muted);font-weight:700;margin:0 0 9px}.group{margin-bottom:18px}.generate{margin-top:12px;width:100%;border:0;border-radius:16px;background:linear-gradient(100deg,#f47d68,#ed5c79);color:white;padding:16px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 9px 20px #ed657025}.generate:hover{filter:brightness(.98);transform:translateY(-1px)}
+.results{margin-top:26px;display:none}.results.show{display:block}.result-top{display:grid;grid-template-columns: .9fr 1.1fr;gap:25px}.dish-img{background:linear-gradient(140deg,#f6d9bf,#f8e9dc);border-radius:22px;min-height:260px;display:grid;place-items:center;font-size:115px}.tags{display:flex;gap:8px;flex-wrap:wrap}.tag{background:#f7eee7;color:#8a6251;border-radius:30px;padding:6px 10px;font-size:11px;font-weight:800}.recipe-title{font-size:30px;margin:12px 0 7px;letter-spacing:-.8px}.desc{color:var(--muted);line-height:1.6}.stats{display:flex;gap:20px;flex-wrap:wrap;margin:18px 0}.stats span{font-size:13px;color:#6d645c}.stats b{display:block;color:var(--ink);font-size:15px;margin-bottom:3px}.recipe-details{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.detail-card{border:1px solid var(--line);border-radius:20px;padding:20px}.detail-card h3{margin:0 0 15px}.ingredient{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #f4eee8;padding:10px 0;font-size:14px}.ingredient:last-child{border:0}.ingredient b{white-space:nowrap}.steps{padding-left:20px;color:#655c54;line-height:1.75}.steps li{padding:5px 0}.save{background:white;border:1px solid var(--line);border-radius:25px;padding:10px 15px;cursor:pointer;font-weight:700}.custom-request{width:100%;min-height:108px;resize:vertical;border:1px solid var(--line);border-radius:15px;padding:14px 15px;font:inherit;font-size:14px;line-height:1.6;color:var(--ink);background:#fff;outline:none}.custom-request:focus{border-color:var(--coral);box-shadow:0 0 0 3px #f16b6118}.custom-request::placeholder{color:#a49a91}.custom-request-help{font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 0}.foot{text-align:center;color:#9b8e83;font-size:12px;padding:25px 0 0}
+@media(max-width:760px){nav{display:none}.hero{grid-template-columns:1fr;padding-top:12px}.hero-art{min-height:170px}.panel{padding:19px}.panel-head{align-items:flex-start;flex-direction:column}.result-top,.recipe-details{grid-template-columns:1fr}.dish-img{min-height:190px}.hero h1{letter-spacing:-1.4px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-mark">🥘</div>masakyuk</div>
+  <nav><a href="#">Beranda</a><a href="#generator">Cari Resep</a><a href="#hasil">Resep Saya</a></nav>
+  <a class="nav-cta" href="#generator" style="text-decoration:none;color:inherit">Mulai masak ✨</a>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Teman masak setiap hari</div>
+      <h1>Bingung masak apa?<br><span>MasakYuk!</span></h1>
+      <p>Pilih bahan yang ada di dapur, tentukan selera, dan temukan inspirasi resep rumahan yang gampang diikuti.</p>
+    </div>
+    <div class="hero-art"><div class="bubble one">🍅 Bahan seadanya</div><div class="emoji">🍲</div><div class="bubble two">✨ Resep praktis</div></div>
+  </section>
+
+  <section class="panel" id="generator">
+    <div class="panel-head"><div><h2>Yuk, racik menu hari ini!</h2><p>Pilih satu opsi pada setiap kategori wajib. Preferensi tambahan bersifat opsional.</p></div><span style="color:var(--green);font-size:13px;font-weight:750">Langkah 1 dari 3</span></div>
+    <div class="step"><span class="num">1</span> Pilih sumber protein <span style="font-size:12px;color:var(--muted);font-weight:500">(wajib · pilih satu)</span></div>
+    <div class="group"><p class="subheading">PROTEIN HEWANI</p><div class="chips" data-group="protein">
+      <button class="chip" data-value="Ayam">🍗 Ayam</button><button class="chip" data-value="Sapi">🥩 Sapi</button><button class="chip" data-value="Ikan">🐟 Ikan</button><button class="chip" data-value="Udang">🦐 Udang</button><button class="chip" data-value="Telur">🥚 Telur</button>
+    </div></div>
+    <div class="group"><p class="subheading">PROTEIN NABATI</p><div class="chips" data-group="protein">
+      <button class="chip" data-value="Tempe">Tempe</button><button class="chip" data-value="Tahu">Tahu</button><button class="chip" data-value="Kacang-kacangan">Kacang-kacangan</button>
+    </div></div>
+    <div class="step"><span class="num">2</span> Pilih karbohidrat <span style="font-size:12px;color:var(--muted);font-weight:500">(wajib · pilih satu)</span></div>
+    <div class="group"><div class="chips" data-group="carb">
+      <button class="chip" data-value="Nasi">🍚 Nasi</button><button class="chip" data-value="Mie">🍜 Mie</button><button class="chip" data-value="Kentang">🥔 Kentang</button><button class="chip" data-value="Roti">🍞 Roti</button><button class="chip" data-value="Ubi">Ubi</button><button class="chip" data-value="Jagung">🌽 Jagung</button>
+    </div></div>
+    <div class="step"><span class="num">3</span> Pilih tipe masakan</div>
+    <div class="group"><div class="chips" data-group="cuisine">
+      <button class="chip active" data-value="Indonesian">🇮🇩 Indonesian</button><button class="chip" data-value="Asian">🥢 Asian</button><button class="chip" data-value="Western">🍝 Western</button>
+    </div></div>
+    <div class="step"><span class="num">＋</span> Preferensi tambahan <span style="font-size:12px;color:var(--muted);font-weight:500">(opsional · pilih maksimal satu)</span></div>
+    <div class="group"><div class="chips" data-group="preference">
+      <button class="chip" data-value="Pedas">🌶️ Pedas</button><button class="chip" data-value="Tidak pedas">Tidak pedas</button><button class="chip" data-value="Berkuah">🍲 Berkuah</button><button class="chip" data-value="Goreng">Goreng</button><button class="chip" data-value="Tumis">Tumis</button><button class="chip" data-value="Panggang">Panggang</button><button class="chip" data-value="Menu hemat">🪙 Menu hemat</button>
+    </div></div>
+    <div class="step"><span class="num">4</span> Pilih jumlah porsi <span style="font-size:12px;color:var(--muted);font-weight:500">(wajib · pilih satu)</span></div>
+    <div class="group"><div class="chips" data-group="servings">
+      <button class="chip" data-value="2">👥 2 porsi</button><button class="chip" data-value="4">👨‍👩‍👧‍👦 4 porsi</button>
+    </div></div>
+    <div class="step"><span class="num">✎</span> Request menu khusus <span style="font-size:12px;color:var(--muted);font-weight:500">(opsional)</span></div>
+    <div class="group">
+      <textarea class="custom-request" id="customRequest" maxlength="500" placeholder="Contoh: Saya ingin ayam saus mentega ala restoran, rasanya gurih sedikit manis, tanpa paprika, dan bahannya mudah ditemukan."></textarea>
+      <p class="custom-request-help">Ceritakan menu atau detail yang kamu inginkan. Boleh dikosongkan · Maksimal 500 karakter.</p>
+    </div>
+    <button class="generate" id="generate">✨ Buatkan Ide Resep</button>
+    <p id="servingsHint" style="text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0">Resep dibuat langsung dengan Gemini AI · Pilih jumlah porsi untuk menyesuaikan takaran bahan</p>
+  </section>
+
+  <section class="results panel" id="hasil">
+    <div class="result-top">
+      <div class="dish-img" id="dishEmoji">🍛</div>
+      <div>
+        <div class="tags"><span class="tag" id="tagCuisine">INDONESIAN</span><span class="tag" id="tagStyle">TUMIS</span><span class="tag">MENU KELUARGA</span></div>
+        <h2 class="recipe-title" id="recipeName">Tumis Ayam Kemangi</h2>
+        <p class="desc" id="recipeDesc">Menu rumahan yang praktis, lezat, dan cocok dinikmati bersama keluarga.</p>
+        <div class="stats"><span><b>⏱ 25 menit</b>Estimasi waktu</span><span><b id="resultServings">👨‍👩‍👧 2 porsi</b>Jumlah porsi</span><span><b>☺ Mudah</b>Tingkat kesulitan</span></div>
+        <button class="save" id="save">♡ Simpan resep</button>
+      </div>
+    </div>
+    <div class="recipe-details">
+      <div class="detail-card"><h3>🧺 Bahan-bahan <small id="ingredientServings" style="color:var(--muted);font-weight:500">(2 porsi)</small></h3><div id="ingredients"></div></div>
+      <div class="detail-card"><h3>👩‍🍳 Langkah memasak</h3><ol class="steps" id="steps"></ol></div>
+    </div>
+  </section>
+  <div class="foot">Dibuat dengan ♥ untuk dapur keluarga Indonesia · MasakYuk</div>
+</main>
+<script>
+const selections = {
+  protein: [],
+  carb: [],
+  cuisine: ["Indonesian"],
+  preference: [],
+  servings: []
+};
+
+// Single-select behavior for protein, carb, preference, cuisine, and servings.
+// Protein, carb, preference and servings each allow at most one active choice.
+document.querySelectorAll(".chips").forEach(group => {
+  group.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = group.dataset.group;
+      const value = btn.dataset.value;
+
+      if (key === "protein" || key === "carb" || key === "preference" ||
+          key === "cuisine" || key === "servings") {
+        const allGroups = [...document.querySelectorAll(`.chips[data-group="${key}"]`)];
+        const alreadyActive = btn.classList.contains("active");
+
+        // Cuisine remains selected; other categories can be cleared by clicking the active option.
+        if (key === "cuisine") {
+          selections[key] = [value];
+          allGroups.forEach(g => g.querySelectorAll(".chip").forEach(b => {
+            b.classList.toggle("active", b.dataset.value === value);
+          }));
+        } else if (alreadyActive) {
+          selections[key] = [];
+          allGroups.forEach(g => g.querySelectorAll(".chip").forEach(b => b.classList.remove("active")));
+        } else {
+          selections[key] = [value];
+          allGroups.forEach(g => g.querySelectorAll(".chip").forEach(b => {
+            b.classList.toggle("active", b.dataset.value === value);
+          }));
+        }
+
+        if (key === "servings") {
+          updateServingLabels();
+        }
+      }
+    });
+  });
+});
+
+function updateServingLabels() {
+  const servings = selections.servings[0];
+  const hint = document.getElementById("servingsHint");
+  if (hint) {
+    hint.textContent = servings
+      ? `Resep dibuat langsung dengan Gemini AI · Takaran bahan disesuaikan untuk ${servings} porsi`
+      : "Resep dibuat langsung dengan Gemini AI · Pilih jumlah porsi untuk menyesuaikan takaran bahan";
+  }
+}
+
+const recipes={
+  Indonesian:{name:"Tumis Ayam Kemangi",emoji:"🍛",style:"TUMIS",desc:"Tumis ayam wangi kemangi dengan bumbu sederhana. Pas untuk lauk makan siang keluarga.",ingredients:[["Dada ayam fillet","300 g"],["Daun kemangi","40 g"],["Bawang merah","40 g"],["Bawang putih","15 g"],["Cabai merah","30 g"],["Kecap manis","25 ml"],["Minyak","15 ml"],["Garam","3 g"]],steps:["Potong ayam menjadi ukuran sekali suap, lalu cuci dan tiriskan.","Iris bawang merah, bawang putih, dan cabai.","Panaskan minyak. Tumis bawang dan cabai sampai harum.","Masukkan ayam, aduk hingga berubah warna dan matang.","Tambahkan kecap serta garam. Masukkan kemangi, aduk sebentar, lalu sajikan."]},
+  Asian:{name:"Chicken Teriyaki Bowl",emoji:"🍱",style:"ASIAN",desc:"Ayam teriyaki manis gurih dengan sayuran, nikmat disajikan bersama nasi hangat.",ingredients:[["Ayam fillet","300 g"],["Bawang bombai","60 g"],["Brokoli","100 g"],["Saus teriyaki","45 ml"],["Kecap asin","10 ml"],["Minyak","15 ml"],["Nasi matang","450 g"]],steps:["Potong ayam dan sayuran, siapkan saus teriyaki.","Tumis bawang bombai dengan sedikit minyak hingga harum.","Masukkan ayam dan masak sampai matang.","Tambahkan saus teriyaki dan kecap asin, aduk rata.","Masukkan brokoli, masak hingga tingkat kematangan sesuai selera. Sajikan dengan nasi."]},
+  Western:{name:"Creamy Chicken Pasta",emoji:"🍝",style:"WESTERN",desc:"Pasta creamy yang lembut dan mudah dibuat untuk variasi menu keluarga.",ingredients:[["Pasta kering","220 g"],["Ayam fillet","250 g"],["Susu cair","200 ml"],["Keju parmesan","35 g"],["Bawang putih","12 g"],["Mentega","20 g"],["Garam dan lada","secukupnya"]],steps:["Rebus pasta sesuai petunjuk kemasan, sisihkan sedikit air rebusan.","Potong ayam, bumbui dengan garam dan lada.","Lelehkan mentega, tumis bawang putih lalu masak ayam hingga matang.","Tuang susu dan masukkan keju, aduk hingga saus creamy.","Masukkan pasta, aduk rata. Tambahkan air rebusan jika saus terlalu kental."]}
+};
+const API_URL = "https://masakyuk.ezradwi10.workers.dev/";
+updateServingLabels();
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[ch]));
+}
+
+function listFrom(value) {
+  if (Array.isArray(value)) return value;
+  if (value == null || value === "") return [];
+  return [value];
+}
+
+async function makeRecipe() {
+  const button = document.getElementById("generate");
+  const resultPanel = document.getElementById("hasil");
+  const cuisine = selections.cuisine[0] || "Indonesian";
+  const proteins = selections.protein;
+  const carbs = selections.carb;
+  const preferences = selections.preference;
+  const servings = Number(selections.servings[0]);
+  const customRequest = document.getElementById("customRequest").value.trim();
+
+  if (!proteins.length) {
+    alert("Protein wajib dipilih. Silakan pilih satu sumber protein.");
+    return;
+  }
+  if (!carbs.length) {
+    alert("Karbohidrat wajib dipilih. Silakan pilih satu sumber karbohidrat.");
+    return;
+  }
+  if (![2, 4].includes(servings)) {
+    alert("Jumlah porsi wajib dipilih: 2 atau 4 porsi.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "⏳ Gemini sedang meracik resep...";
+  resultPanel.classList.add("show");
+  document.getElementById("recipeName").textContent = "Sedang membuat resep...";
+  document.getElementById("recipeDesc").textContent = "Mohon tunggu sebentar, MasakYuk sedang menyiapkan ide menu untukmu.";
+  document.getElementById("ingredients").innerHTML = "";
+  document.getElementById("steps").innerHTML = "";
+  document.getElementById("dishEmoji").textContent = "🍲";
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        protein: proteins,
+        carbohydrate: carbs,
+        cuisine,
+        preferences,
+        servings,
+        customRequest
+      })
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("Respons API tidak berupa JSON. Periksa konfigurasi Cloudflare Worker.");
+    }
+
+    if (!response.ok || data.success === false) {
+      throw new Error(data.error || `Permintaan gagal (${response.status}).`);
+    }
+
+    const recipe = data.recipe || data;
+    const title = recipe.name || recipe.title || "Resep MasakYuk";
+    const description = recipe.description || recipe.desc || `Resep ${cuisine} sesuai bahan pilihanmu.`;
+    const ingredients = listFrom(recipe.ingredients || recipe.bahan);
+    const steps = listFrom(recipe.steps || recipe.instructions || recipe.langkah);
+
+    document.getElementById("recipeName").textContent = title;
+    document.getElementById("recipeDesc").textContent = description;
+    document.getElementById("resultServings").textContent = `👨‍👩‍👧 ${servings} porsi`;
+    document.getElementById("ingredientServings").textContent = `(${servings} porsi)`;
+    document.getElementById("tagCuisine").textContent = cuisine.toUpperCase();
+    document.getElementById("tagStyle").textContent = preferences[0]
+      ? preferences[0].toUpperCase()
+      : cuisine.toUpperCase();
+    document.getElementById("dishEmoji").textContent = "🍲";
+
+    document.getElementById("ingredients").innerHTML = ingredients.map(item => {
+      if (Array.isArray(item)) {
+        return `<div class="ingredient"><span>${escapeHTML(item[0])}</span><b>${escapeHTML(item[1])}</b></div>`;
+      }
+      if (typeof item === "string") {
+        return `<div class="ingredient"><span>${escapeHTML(item)}</span></div>`;
+      }
+      const name = item.name || item.ingredient || item.bahan || "Bahan";
+      const amount = item.amount ?? item.quantity ?? item.gram ?? item.qty ?? "";
+      const unit = item.unit || item.satuan || "";
+      return `<div class="ingredient"><span>${escapeHTML(name)}</span><b>${escapeHTML([amount, unit].filter(Boolean).join(" "))}</b></div>`;
+    }).join("");
+
+    document.getElementById("steps").innerHTML = steps.map(item => {
+      const text = typeof item === "string" ? item : (item.instruction || item.step || item.text || JSON.stringify(item));
+      return `<li>${escapeHTML(text)}</li>`;
+    }).join("");
+
+    if (!ingredients.length) {
+      document.getElementById("ingredients").textContent = "Data bahan belum tersedia pada respons API.";
+    }
+    if (!steps.length) {
+      document.getElementById("steps").innerHTML = "<li>Langkah memasak belum tersedia pada respons API.</li>";
+    }
+
+    resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    document.getElementById("recipeName").textContent = "Resep belum berhasil dibuat";
+    document.getElementById("recipeDesc").textContent = error.message || "Terjadi kesalahan saat menghubungi API.";
+    document.getElementById("ingredients").innerHTML = "";
+    document.getElementById("steps").innerHTML = "";
+  } finally {
+    button.disabled = false;
+    button.textContent = "✨ Buatkan Ide Resep";
+  }
+}
+
+document.getElementById("generate").addEventListener("click", makeRecipe);
+document.getElementById("save").addEventListener("click",e=>{e.currentTarget.textContent=e.currentTarget.textContent.includes("Simpan")?"♥ Tersimpan":"♡ Simpan resep"});
+</script>
+</body>
+</html>
